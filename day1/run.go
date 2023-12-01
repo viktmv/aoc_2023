@@ -59,7 +59,7 @@ func ReadLine(line string) int {
 	rune := []rune(line)
 
 	for i := 0; i < len(rune); i++ {
-    letter := rune[i]
+		letter := rune[i]
 
 		if _, err := strconv.Atoi(string(letter)); err == nil {
 			if first == "" {
@@ -67,18 +67,18 @@ func ReadLine(line string) int {
 			}
 			last = string(letter)
 		} else {
-      limit := i + 5
+			limit := i + 5
 
-      if i + limit > len(rune) {
-        limit = len(rune)
-      }
+			if i+limit > len(rune) {
+				limit = len(rune)
+			}
 
 			if p := peek(rune[i:limit]); p != "" {
 				if first == "" {
 					first = string(p)
 				}
 				last = string(p)
-        i += len(p) - 1
+				i += len(p) - 1
 			}
 		}
 	}
