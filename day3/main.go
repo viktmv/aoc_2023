@@ -172,38 +172,14 @@ func toDigit(str *string) int {
 }
 
 func checkAround(pos Position, grid Grid) (bool, Symbol) {
-	// up
-	if valid, symbol := checkPosition(Position{X: pos.X, Y: pos.Y - 1}, grid); valid {
-		return valid, Symbol{Value: symbol, Position: Position{X: pos.X, Y: pos.Y - 1}}
-	}
-	// up right
-	if valid, symbol := checkPosition(Position{X: pos.X + 1, Y: pos.Y - 1}, grid); valid {
-		return valid, Symbol{Value: symbol, Position: Position{X: pos.X + 1, Y: pos.Y - 1}}
-	}
-	// right
-	if valid, symbol := checkPosition(Position{X: pos.X + 1, Y: pos.Y}, grid); valid {
-		return valid, Symbol{Value: symbol, Position: Position{X: pos.X + 1, Y: pos.Y}}
-	}
-	// down - right
-	if valid, symbol := checkPosition(Position{X: pos.X + 1, Y: pos.Y + 1}, grid); valid {
-		return valid, Symbol{Value: symbol, Position: Position{X: pos.X + 1, Y: pos.Y + 1}}
-	}
-	// down
-	if valid, symbol := checkPosition(Position{X: pos.X, Y: pos.Y + 1}, grid); valid {
-		return valid, Symbol{Value: symbol, Position: Position{X: pos.X, Y: pos.Y + 1}}
-	}
-	// down - left
-	if valid, symbol := checkPosition(Position{X: pos.X - 1, Y: pos.Y + 1}, grid); valid {
-		return valid, Symbol{Value: symbol, Position: Position{X: pos.X - 1, Y: pos.Y + 1}}
-	}
-	// left
-	if valid, symbol := checkPosition(Position{X: pos.X - 1, Y: pos.Y}, grid); valid {
-		return valid, Symbol{Value: symbol, Position: Position{X: pos.X - 1, Y: pos.Y}}
-	}
-	// up left
-	if valid, symbol := checkPosition(Position{X: pos.X - 1, Y: pos.Y - 1}, grid); valid {
-		return valid, Symbol{Value: symbol, Position: Position{X: pos.X - 1, Y: pos.Y - 1}}
-	}
+  for x := -1; x <= 1; x++ {
+		for y := -1; y <= 1; y++ {
+      valid, symbol := checkPosition(Position{X: pos.X + x, Y: pos.Y + y}, grid)
+      if valid {
+        return valid, Symbol{Value: symbol, Position: Position{X: pos.X + x, Y: pos.Y + y}}
+      }
+    }
+  }
 	return false, Symbol{Value: "", Position: Position{}}
 }
 
