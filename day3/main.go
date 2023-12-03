@@ -130,7 +130,6 @@ func findAdjacentParts(gear *Gear, parts []PartNumber) (*PartNumber, *PartNumber
 			// slide by X to the left
 			// X represent the end of the part number
 			// need to check all X points of the part
-			// 1,2,3
 
 			for i := 0; i <= len(part.Value)-1; i++ {
 				posX := part.Position.X - i
