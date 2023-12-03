@@ -174,9 +174,10 @@ func toDigit(str *string) int {
 func checkAround(pos Position, grid Grid) (bool, Symbol) {
   for x := -1; x <= 1; x++ {
 		for y := -1; y <= 1; y++ {
-      valid, symbol := checkPosition(Position{X: pos.X + x, Y: pos.Y + y}, grid)
+      target := Position{X: pos.X + x, Y: pos.Y + y} 
+      valid, symbol := checkPosition(target, grid)
       if valid {
-        return valid, Symbol{Value: symbol, Position: Position{X: pos.X + x, Y: pos.Y + y}}
+        return valid, Symbol{Value: symbol, Position: target}
       }
     }
   }
