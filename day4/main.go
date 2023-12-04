@@ -33,7 +33,7 @@ func main() {
 		cards = append(cards, card)
 	}
 
-  // pt 1
+	// pt 1
 	var total int
 	for _, card := range cards {
 		total += card.TotalPoints
@@ -95,11 +95,11 @@ func parseCard(line string) Card {
 	}
 
 	return Card{
-    Matches: counter - 1, 
-    Numbers: nums, 
-    WinningNumbers: winningNums, 
-    TotalPoints: points,
-  }
+		Matches:        counter - 1,
+		Numbers:        nums,
+		WinningNumbers: winningNums,
+		TotalPoints:    points,
+	}
 }
 
 func toDigit(str *string) int {
