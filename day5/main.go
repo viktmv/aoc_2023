@@ -1,7 +1,7 @@
 package main
 
 import (
-    "bufio"
+	"bufio"
 	"fmt"
 	"log"
 	"math"
@@ -15,7 +15,7 @@ const input string = "input_test.txt"
 
 var markers = [...]string{
 	"seed-to-soil",
-    "soil-to-fertilizer",
+	"soil-to-fertilizer",
 	"fertilizer-to-water",
 	"water-to-light",
 	"light-to-temperature",
@@ -79,13 +79,13 @@ func parseAlmanac(file *os.File) {
 			for _, seed := range seedsList {
 				if d, ok := toDigit(seed); ok {
 					if len(currPair) > 2 {
-                        continue
+						continue
 					}
-                    currPair = append(currPair, d)
-                    if len(currPair) == 2 {
-                        pairs = append(pairs, currPair)
-                        currPair = nil
-                    }
+					currPair = append(currPair, d)
+					if len(currPair) == 2 {
+						pairs = append(pairs, currPair)
+						currPair = nil
+					}
 				}
 			}
 		}
