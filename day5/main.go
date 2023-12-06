@@ -11,7 +11,29 @@ import (
 	"time"
 )
 
-var input string = "input.txt"
+const input string = "input_test.txt"
+
+var markers = [...]string{
+	"seed-to-soil",
+	"soil-to-fertilizer",
+	"fertilizer-to-water",
+	"water-to-light",
+	"light-to-temperature",
+	"temperature-to-humidity",
+	"humidity-to-location",
+}
+
+var rangesMap = map[string][][]int{
+	"seed-to-soil":            {},
+	"soil-to-fertilizer":      {},
+	"fertilizer-to-water":     {},
+	"water-to-light":          {},
+	"light-to-temperature":    {},
+	"temperature-to-humidity": {},
+	"humidity-to-location":    {},
+}
+
+// pt2 - 100165128
 
 type Almanac struct {
 	Seeds      []int
@@ -37,14 +59,6 @@ func parseAlmanac(file *os.File) {
 	scanner := bufio.NewScanner(file)
 	var seeds []int
 	var marker string
-
-	var seedToSoil [][]int
-	var soilToFertilizer [][]int
-	var fertilizerToWater [][]int
-	var waterToLight [][]int
-	var lightToTemperature [][]int
-	var temperatureToHumidity [][]int
-	var humidityToLocation [][]int
 	var pairs [][]int
 
 	for scanner.Scan() {
@@ -80,73 +94,15 @@ func parseAlmanac(file *os.File) {
 			}
 		}
 
-		if strings.HasPrefix(line, "seed-to-soil") {
-			marker = "seed-to-soil"
-		}
-
-		if strings.HasPrefix(line, "soil-to-fertilizer") {
-			marker = "soil-to-fertilizer"
-		}
-
-		if strings.HasPrefix(line, "fertilizer-to-water") {
-			marker = "fertilizer-to-water"
-		}
-
-		if strings.HasPrefix(line, "water-to-light") {
-			marker = "water-to-light"
-		}
-
-		if strings.HasPrefix(line, "light-to-temperature") {
-			marker = "light-to-temperature"
-		}
-
-		if strings.HasPrefix(line, "temperature-to-humidity") {
-			marker = "temperature-to-humidity"
-		}
-
-		if strings.HasPrefix(line, "humidity-to-location") {
-			marker = "humidity-to-location"
-		}
-
-		if marker == "seed-to-soil" {
-			if r, ok := buildRange(line); ok {
-				seedToSoil = append(seedToSoil, r)
+		for _, m := range markers {
+			if strings.HasPrefix(line, m) {
+				marker = m
 			}
 		}
 
-		if marker == "soil-to-fertilizer" {
+		if rangesMap[marker] != nil {
 			if r, ok := buildRange(line); ok {
-				soilToFertilizer = append(soilToFertilizer, r)
-			}
-		}
-
-		if marker == "fertilizer-to-water" {
-			if r, ok := buildRange(line); ok {
-				fertilizerToWater = append(fertilizerToWater, r)
-			}
-		}
-
-		if marker == "water-to-light" {
-			if r, ok := buildRange(line); ok {
-				waterToLight = append(waterToLight, r)
-			}
-		}
-
-		if marker == "light-to-temperature" {
-			if r, ok := buildRange(line); ok {
-				lightToTemperature = append(lightToTemperature, r)
-			}
-		}
-
-		if marker == "temperature-to-humidity" {
-			if r, ok := buildRange(line); ok {
-				temperatureToHumidity = append(temperatureToHumidity, r)
-			}
-		}
-
-		if marker == "humidity-to-location" {
-			if r, ok := buildRange(line); ok {
-				humidityToLocation = append(humidityToLocation, r)
+				rangesMap[marker] = append(rangesMap[marker], r)
 			}
 		}
 	}
@@ -160,20 +116,22 @@ func parseAlmanac(file *os.File) {
 		}
 	}
 
-	r := processRange(seeds, seedToSoil)
-	r1 := processRange(r, soilToFertilizer)
-	r2 := processRange(r1, fertilizerToWater)
-	r3 := processRange(r2, waterToLight)
-	r4 := processRange(r3, lightToTemperature)
-	r5 := processRange(r4, temperatureToHumidity)
-	r6 := processRange(r5, humidityToLocation)
+	var r []int
+	for i, m := range markers {
+		if i == 0 {
+			r = processRange(seeds, rangesMap[m])
+		} else {
+			r = processRange(r, rangesMap[m])
+		}
+	}
 
 	min := int(math.Inf(1))
-	for _, l := range r6 {
+	for _, l := range r {
 		if l < min {
 			min = l
 		}
 	}
+
 	fmt.Printf("min: %d\n", min)
 }
 
