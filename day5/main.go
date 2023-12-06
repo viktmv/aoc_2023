@@ -35,11 +35,6 @@ var rangesMap = map[string][][]int{
 
 // pt2 - 100165128
 
-type Almanac struct {
-	Seeds      []int
-	SeedToSoil map[int]int
-}
-
 func main() {
 	file, err := os.Open(input)
 	if err != nil {
