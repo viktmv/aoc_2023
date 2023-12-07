@@ -140,8 +140,8 @@ func DetermineKind(cards string) string {
 			return "four-of-a-kind"
 		}
 		if v == 3 {
-			for _, v := range counter {
-				if v == 2 {
+			for _, c := range counter {
+				if c == 2 {
 					return "full-house"
 				}
 			}
