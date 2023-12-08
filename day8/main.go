@@ -94,13 +94,3 @@ func main() {
 
 	fmt.Println("result:", lcm.FindLCM(counts))
 }
-
-func allEndWithZ(list []string) bool {
-	match := true
-	for _, s := range list {
-		if !strings.HasSuffix(s, "Z") {
-			match = false
-		}
-	}
-	return match
-}
