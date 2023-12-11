@@ -21,6 +21,8 @@ type Grid [][]*Point
 
 var grid Grid
 
+const expansionRate int = 2
+
 func main() {
 	f, err := os.Open("input")
 	if err != nil {
@@ -50,9 +52,11 @@ func main() {
 		grid = append(grid, pointRow)
 		// empand row
 		if isRowEmpty(pointRow) {
-			newRow := make([]*Point, len(pointRow))
-			copy(newRow, pointRow)
-			grid = append(grid, newRow)
+			for i := 0; i < expansionRate-1; i++ {
+				newRow := make([]*Point, len(pointRow))
+				copy(newRow, pointRow)
+				grid = append(grid, newRow)
+			}
 		}
 	}
 
@@ -73,27 +77,31 @@ func main() {
 
 	shift := 0
 	for _, idx := range emptyColumns {
-		// columns are being moved
-		x := idx + shift
-		for y := range grid {
-			if len(grid[y]) == x {
-				point := Point{x: x, y: y, v: ".", isGalaxy: false}
-				grid[y] = append(grid[y], &point)
-			} else {
-				point := Point{x: x, y: y, v: ".", isGalaxy: false}
-				grid[y] = append(grid[y][:x+1], grid[y][x:]...)
-				grid[y][x] = &point
+		// columns are shifted
+		for i := 0; i < expansionRate-1; i++ {
+			x := idx + shift
+			for y := range grid {
+				if len(grid[y]) == x {
+					point := Point{x: x, y: y, v: ".", isGalaxy: false}
+					grid[y] = append(grid[y], &point)
+				} else {
+					point := Point{x: x, y: y, v: ".", isGalaxy: false}
+					grid[y] = append(grid[y][:x+1], grid[y][x:]...)
+					grid[y][x] = &point
+				}
 			}
+			shift++
 		}
-		shift++
 	}
 
-	// normalize coordinates
+	// normalize point coordinates after all the shifting around
 	for y, row := range grid {
 		for x, point := range row {
 			point.x = x
 			point.y = y
+            fmt.Printf("%s", point.v)
 		}
+        fmt.Println()
 	}
 
 	var paths []int
@@ -114,7 +122,9 @@ func main() {
 var distances map[Point]map[Point]int
 
 func manhattanDistance(a *Point, b *Point) int {
-	return int(math.Abs(float64(a.x)-float64(b.x)) + math.Abs(float64(a.y)-float64(b.y)))
+    diffX := float64(a.x)-float64(b.x)
+    diffY := float64(a.y)-float64(b.y)
+	return int(math.Abs(diffX) + math.Abs(diffY))
 }
 
 func parseLine(line string) []string {
