@@ -38,7 +38,6 @@ func main() {
 
 		for i, stringNum := range parsed {
 			number := mustAtoi(stringNum)
-
 			if i == 0 {
 				first = append(first, number)
 			} else if i == 1 {
@@ -85,7 +84,6 @@ func mustAtoi(s string) int {
 	if err != nil {
 		log.Fatal("is this a number?", err)
 	}
-
 	return number
 }
 
