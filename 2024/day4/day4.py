@@ -1,5 +1,6 @@
-filename = "input_test.txt"
-grid = []
+from collections import Counter
+
+filename = "input.txt"
 target = "XMAS"
 directions = [
     (0, 1),  # up
@@ -28,6 +29,13 @@ class Node:
         return f"{self.char}; x: {self.x}; y: {self.y}; used: {self.used}"
 
 
+grid = []
+row_idx = 0
+for line in open(filename).readlines():
+    grid.append([Node(line[idx], x=idx, y=row_idx) for idx in range(len(line.strip()))])
+    row_idx += 1
+
+
 def next_char(prev):
     return target[target.index(prev) + 1]
 
@@ -43,13 +51,6 @@ def get_node(x, y):
         return grid[y][x]
     except IndexError:
         return None
-
-
-def get_adjacent(node):
-    x, y = node.x, node.y
-
-    nodes = [get_node(x=x + cx, y=y + cy) for cx, cy in directions]
-    return [n for n in nodes if n]
 
 
 def try_direction(prev: Node, dir, word):
@@ -83,12 +84,6 @@ def try_all_directions(node):
     return count
 
 
-row_idx = 0
-for line in open(filename).readlines():
-    grid.append([Node(line[idx], x=idx, y=row_idx) for idx in range(len(line.strip()))])
-    row_idx += 1
-
-
 def part1():
     count = 0
     for y in range(len(grid)):
@@ -100,7 +95,31 @@ def part1():
 
 
 def part2():
-    pass
+    counter = 0
+    for y in range(len(grid)):
+        for x in range(len(grid[y])):
+            node = grid[y][x]
+
+            if node.char != "A":
+                continue
+
+            results = []
+            for cx, cy in [(-1, -1), (1, 1), (1, -1), (-1, 1)]:
+                n = get_node(x=node.x + cx, y=node.y + cy)
+                if n and n.char in ("S", "M"):
+                    results.append(n.char)
+
+            if len(results) != 4:
+                continue
+
+            if results[0] == results[1]:
+                continue
+
+            c = Counter(results)
+            if c.get("S") == 2 and c.get("M") == 2:
+                counter += 1
+
+    print(counter)
 
 
 # Print
@@ -115,4 +134,4 @@ def print_grid():
         print()
 
 
-part1()
+part2()
