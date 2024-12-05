@@ -40,8 +40,6 @@ let validReports = reportsList.filter(report => {
 })
 
 
-// part 1
-
 function part1() {
     console.log('valid reports', validReports)
     let sum = 0
@@ -51,8 +49,6 @@ function part1() {
 
     console.log('sum', sum)
 }
-
-// part 2
 
 for (let report of invalidReports) {
     for (let i = 0; i < report.length; i++) {
