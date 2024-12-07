@@ -7,7 +7,7 @@ defmodule Day7 do
     |> String.split("\n")
     |> Enum.map(fn x -> extract(x) end)
     |> Enum.map(fn {target, operands} ->
-      case solve(target, operands, [], 0) do
+      case solve(target, operands, 0) do
         true -> target
         _ -> 0
       end
@@ -16,27 +16,27 @@ defmodule Day7 do
     |> IO.inspect()
   end
 
-  def solve(target, [operand | tail], operators, 0) do
-    solve(target, tail, operators, operand)
+  def solve(target, [operand | tail], 0) do
+    solve(target, tail, operand)
   end
 
-  def solve(target, [operand | tail], operators, running_total) do
+  def solve(target, [operand | tail], running_total) do
     cond do
-      solve(target, tail, ["+" | operators], apply_operator("+", running_total, operand)) ->
+      solve(target, tail, apply_operator("+", running_total, operand)) ->
         true
 
-      solve(target, tail, ["*" | operators], apply_operator("*", running_total, operand)) ->
+      solve(target, tail, apply_operator("*", running_total, operand)) ->
         true
 
       true ->
-        solve(target, tail, ["||" | operators], apply_operator("||", running_total, operand))
+        solve(target, tail, apply_operator("||", running_total, operand))
     end
   end
 
-  def solve(target, [], _, running_total) when running_total == target,
+  def solve(target, [], running_total) when running_total == target,
     do: true
 
-  def solve(_, [], _, _), do: false
+  def solve(_, [], _), do: false
 
   def extract(string) do
     [target, operands] = String.split(string, ":")
