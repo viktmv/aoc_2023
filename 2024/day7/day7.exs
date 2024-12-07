@@ -5,7 +5,7 @@ defmodule Day7 do
     File.read!(@pathname)
     |> String.trim()
     |> String.split("\n")
-    |> Enum.map(fn x -> extract(x) end)
+    |> Enum.map(&extract/1)
     |> Enum.map(fn {target, operands} ->
       case solve(target, operands, 0) do
         true -> target
@@ -53,10 +53,10 @@ defmodule Day7 do
   def apply_operator("+", operand1, operand2), do: operand1 + operand2
   def apply_operator("*", operand1, operand2), do: operand1 * operand2
 
-  def apply_operator("||", operand1, operand2),
-    do:
-      (Integer.to_string(operand1) <> Integer.to_string(operand2))
-      |> String.to_integer()
+  def apply_operator("||", operand1, operand2) do
+    (Integer.to_string(operand1) <> Integer.to_string(operand2))
+    |> String.to_integer()
+  end
 end
 
 Day7.run()
